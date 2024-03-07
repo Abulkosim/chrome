@@ -1,0 +1,111 @@
+body {
+  font-family: Arial, sans-serif; 
+  width: 320px;
+  padding: 8px 16px 24px;
+  color: #333;
+  letter-spacing: 0.5px;
+  user-select: none;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 28px;
+}
+
+label {
+  font-size: 18px;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  outline: none;
+  color: #333;
+}
+
+input:focus {
+  border: 2px solid #145da0;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  outline: none;
+  transition: background-color 0.3s;
+  color: #e3e3e3;
+}
+
+form, 
+form div, 
+form div input {
+  width: 100%;
+}
+
+.login {
+  background-color: #145da0;
+}
+
+.login:hover {
+  background-color: #124e85;
+}
+
+.login:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.login:active {
+  background-color: #0e4473;
+}
+
+.logout {
+  background-color: #c3242b;
+}
+
+.logout:hover {
+  background-color: #b90e0a;
+}
+
+.logout:active {
+  background-color: #a90e0a;
+}
+
+.pwd {
+  position: relative;
+  width: 100%;
+}
+
+svg {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
+}
