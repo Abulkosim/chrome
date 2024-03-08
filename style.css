@@ -3,7 +3,7 @@
 body {
   font-family: 'Poppins', sans-serif;
   width: 360px;
-  padding: 16px 20px 24px;
+  padding: 16px 20px;
   color: #fff;
   background: #18181b;
 }
@@ -113,11 +113,6 @@ form div input {
   background-color: #bf7507;
 }
 
-.login:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
 .logout {
   background-color: #c0392b;
 }
@@ -132,6 +127,11 @@ form div input {
 
 .logout:active {
   background-color: #87271c;
+}
+
+.login:disabled,
+.logout:disabled {
+  background-color: #666;
 }
 
 .pwd {
@@ -157,4 +157,21 @@ svg:hover {
 
 .asterisk {
   color: #ef4444;
+}
+
+#info {
+  margin-top: 4px;
+  color: #a1a1aa;
+}
+
+#state {
+  text-align: center;
+  font-size: 14px;
+  margin: 8px 0 0px;
+}
+
+#timer {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 3px;
 }
