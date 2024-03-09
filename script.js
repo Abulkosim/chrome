@@ -57,6 +57,30 @@ function stopTimer() {
 login.addEventListener('click', handleLogin);
 logout.addEventListener('click', handleLogout);
 
+async function authenticate(username, password) {
+  const payload = `username=${username}&pwd=${password}&password=${password}&mp_idx=0&pwd_r=`;
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'Cookie': 'authtok=rm9NU7M-zG3u8fDBiGJLldZ1l-XBGUcH4vyHVZXSLVAVTqcFdYRCMgqPB9cQISl+'
+  };
+
+  try {
+    const response = await fetch('https://10.20.10.1:8843/', {
+      method: 'POST',
+      body: payload,
+      headers: headers,
+    });
+
+    const data = await response.text();
+    const contentLength = data.length;
+    const isSuccessful = (800 < contentLength && contentLength < 900);
+    return isSuccessful;
+  } catch (error) {
+    console.error("Authentication Error:", error);
+    return false;
+  }
+}
+
 async function handleLogin() {
   const uname = username.value;
   const pwd = password.value;
@@ -66,46 +90,49 @@ async function handleLogin() {
     return;
   }
 
-  // try {
-  // const response = await fetch('', {
-  //   method: 'POST',
-  //   headers: {
-  //     'Content-Type': 'application/json'
-  //   },
-  //   body: JSON.stringify({ uname, pwd })
-  // });
+  const isSignedIn = await authenticate(uname, pwd);
 
-  // if (response.ok) {
-  state.textContent = 'Login successful!';
-  startTimer();
-  login.disabled = isTimerActive;
-  logout.disabled = !isTimerActive;
-  // } else {
-  //   state.textContent = 'Invalid username or password';
-  // }
-  // } catch (error) {
-  //   console.error('Login error:', error);
-  //   state.textContent = 'An error occurred. Please try again.';
-  // }
+  if (isSignedIn) {
+    state.textContent = 'Login successful!';
+    startTimer();
+    login.disabled = isTimerActive;
+    logout.disabled = !isTimerActive;
+  } else {
+    state.textContent = 'Login failed!';
+  }
+}
+
+async function signout() {
+  const payload = 'perform=logout&mp_idx=0';
+  const headers = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  };
+
+  try {
+    const response = await fetch('https://10.20.10.1:8843/setuser.cgi', {
+      method: 'POST',
+      body: payload,
+      headers: headers,
+    });
+
+    const data = await response.text();
+    const contentLength = data.length;
+    return contentLength < 200;
+  } catch (error) {
+    console.error("Logout Error:", error);
+    return false;
+  }
 }
 
 async function handleLogout() {
-  // try {
-  //   const response = await fetch('', {
-  //     method: 'POST'
-  //   });
+  const isSignedOut = await signout();
 
-  //   if (response.ok) {
-  state.textContent = 'Logout successful';
-  stopTimer();
-  login.disabled = isTimerActive;
-  logout.disabled = !isTimerActive;
-  //   } else {
-  //     state.textContent = 'Logout failed';
-  //   }
-  // } catch (error) {
-  //   console.error('Logout error:', error);
-  //   state.textContent = 'An error occurred. Please try again.';
-  // }
+  if (isSignedOut) {
+    state.textContent = 'Logout successful';
+    stopTimer();
+    login.disabled = isTimerActive;
+    logout.disabled = !isTimerActive;
+  } else {
+    state.textContent = 'Logout failed';
+  }
 }
-
