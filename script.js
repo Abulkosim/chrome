@@ -90,16 +90,33 @@ async function handleLogin() {
     return;
   }
 
-  const isSignedIn = await authenticate(uname, pwd);
+  // const isSignedIn = await authenticate(uname, pwd);
 
-  if (isSignedIn) {
-    state.textContent = 'Login successful!';
-    startTimer();
-    login.disabled = isTimerActive;
-    logout.disabled = !isTimerActive;
-  } else {
-    state.textContent = 'Login failed!';
-  }
+  // if (isSignedIn) {
+  //   state.textContent = 'Login successful!';
+  //   startTimer();
+  //   login.disabled = isTimerActive;
+  //   logout.disabled = !isTimerActive;
+  // } else {
+  //   state.textContent = 'Login failed!';
+  // }
+
+  authenticate(uname, pwd)
+    .then(isSignedIn => {
+      if (isSignedIn) {
+        state.textContent = 'Login successful!';
+        startTimer();
+        console.log('isTimerActive:', isTimerActive)
+        login.disabled = isTimerActive;
+        logout.disabled = !isTimerActive;
+      } else {
+        state.textContent = 'Login failed!';
+      }
+    })
+    .catch(error => {
+      console.error("Authentication Error:", error);
+      state.textContent = 'An error occurred. Please try again';
+    });
 }
 
 async function signout() {
