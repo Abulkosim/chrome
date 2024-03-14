@@ -26,6 +26,15 @@ state.textContent = localStorage.getItem('state')
 login.addEventListener('click', handleLogin);
 logout.addEventListener('click', handleLogout);
 
+/*
+
+fetch("https://10.20.10.1:8843/", requestOptions)
+  .then((response) => response.text())
+  .then((result) => console.log(result))
+  .catch((error) => console.error(error));
+  
+*/
+
 async function authenticate(username, password) {
   const payload = `username=${username}&pwd=${password}&password=${password}&mp_idx=0&pwd_r=`;
   const headers = {
@@ -36,8 +45,8 @@ async function authenticate(username, password) {
   try {
     const response = await fetch('https://10.20.10.1:8843/', {
       method: 'POST',
-      body: payload,
       headers: headers,
+      body: payload,
     });
 
     console.log(response)
@@ -63,7 +72,6 @@ async function handleLogin() {
 
   await authenticate(uname, pwd)
   state.textContent = 'Logged in successfully!'
-
   localStorage.setItem('username', uname)
   localStorage.setItem('password', pwd)
   localStorage.setItem('state', state.textContent)
@@ -95,5 +103,6 @@ async function signout() {
 async function handleLogout() {
   await signout();
   state.textContent = 'Logged out successfully!'
+  localStorage.setItem('state', state.textContent)
 }
 
