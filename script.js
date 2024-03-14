@@ -2,15 +2,10 @@ const username = document.getElementById('username');
 const password = document.getElementById('password');
 const invisible = document.getElementById('invisible');
 const visible = document.getElementById('visible');
-const timer = document.getElementById('timer');
 const state = document.getElementById('state');
 
 const login = document.querySelector('.login');
 const logout = document.querySelector('.logout');
-
-let deadline;
-let isTimerActive = false;
-let timerId;
 
 invisible.addEventListener('click', () => {
   password.type = 'text';
@@ -24,35 +19,9 @@ visible.addEventListener('click', () => {
   invisible.style.display = 'block';
 });
 
-function updateTimer() {
-  const now = new Date().getTime();
-  const timeLeft = deadline - now;
-
-  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-  timer.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-  if (timeLeft < 0) {
-    clearInterval(timerId);
-    isTimerActive = false;
-    handleLogout();
-  }
-}
-
-function startTimer() {
-  deadline = new Date(Date.now() + 4 * 60 * 60 * 1000);
-  isTimerActive = true;
-  updateTimer();
-  timerId = setInterval(updateTimer, 1000);
-}
-
-function stopTimer() {
-  clearInterval(timerId);
-  timer.textContent = '00:00:00';
-  isTimerActive = false;
-}
+username.value = localStorage.getItem('username')
+password.value = localStorage.getItem('password')
+state.textContent = localStorage.getItem('state')
 
 login.addEventListener('click', handleLogin);
 logout.addEventListener('click', handleLogout);
@@ -70,6 +39,8 @@ async function authenticate(username, password) {
       body: payload,
       headers: headers,
     });
+
+    console.log(response)
 
     const data = await response.text();
     const contentLength = data.length;
@@ -90,33 +61,12 @@ async function handleLogin() {
     return;
   }
 
-  // const isSignedIn = await authenticate(uname, pwd);
+  await authenticate(uname, pwd)
+  state.textContent = 'Logged in successfully!'
 
-  // if (isSignedIn) {
-  //   state.textContent = 'Login successful!';
-  //   startTimer();
-  //   login.disabled = isTimerActive;
-  //   logout.disabled = !isTimerActive;
-  // } else {
-  //   state.textContent = 'Login failed!';
-  // }
-
-  authenticate(uname, pwd)
-    .then(isSignedIn => {
-      if (isSignedIn) {
-        state.textContent = 'Login successful!';
-        startTimer();
-        console.log('isTimerActive:', isTimerActive)
-        login.disabled = isTimerActive;
-        logout.disabled = !isTimerActive;
-      } else {
-        state.textContent = 'Login failed!';
-      }
-    })
-    .catch(error => {
-      console.error("Authentication Error:", error);
-      state.textContent = 'An error occurred. Please try again';
-    });
+  localStorage.setItem('username', uname)
+  localStorage.setItem('password', pwd)
+  localStorage.setItem('state', state.textContent)
 }
 
 async function signout() {
@@ -134,7 +84,8 @@ async function signout() {
 
     const data = await response.text();
     const contentLength = data.length;
-    return contentLength < 200;
+
+    return contentLength < 200
   } catch (error) {
     console.error("Logout Error:", error);
     return false;
@@ -142,14 +93,7 @@ async function signout() {
 }
 
 async function handleLogout() {
-  const isSignedOut = await signout();
-
-  if (isSignedOut) {
-    state.textContent = 'Logout successful';
-    stopTimer();
-    login.disabled = isTimerActive;
-    logout.disabled = !isTimerActive;
-  } else {
-    state.textContent = 'Logout failed';
-  }
+  await signout();
+  state.textContent = 'Logged out successfully!'
 }
+
