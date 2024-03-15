@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const username = document.getElementById('username');
 const password = document.getElementById('password');
 const invisible = document.getElementById('invisible');
@@ -28,34 +26,25 @@ state.textContent = localStorage.getItem('state')
 login.addEventListener('click', handleLogin);
 logout.addEventListener('click', handleLogout);
 
-/*
-
-fetch("https://10.20.10.1:8843/", requestOptions)
-  .then((response) => response.text())
-  .then((result) => console.log(result))
-  .catch((error) => console.error(error));
-  
-*/
-
 async function authenticate(username, password) {
-  const payload = `username=${username}&pwd=${password}&password=${password}&mp_idx=0&pwd_r=`;
+  const timestamp = new Date().getTime()
+  const payload = `username=${username}&pwd=${password}&password=${password}&mp_idx=${timestamp}&pwd_r=`;
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
     'Cookie': 'authtok=rm9NU7M-zG3u8fDBiGJLldZ1l-XBGUcH4vyHVZXSLVAVTqcFdYRCMgqPB9cQISl+'
   };
 
   try {
-    const response = await axios.post('https://10.20.10.1:8843/', payload, { headers });
+    const response = await fetch('https://10.20.10.1:8843/', {
+      method: 'POST',
+      headers: headers,
+      body: payload
+    });
 
-    console.log("Full Response:", response);
-
-    if (response.status === 200) {
-      const responseData = response.data;
-      console.log("Response Data:", responseData);
-      return true;
-    } else {
-      return false;
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    return true;
   } catch (error) {
     console.error("Authentication Error:", error);
     return false;
@@ -83,26 +72,27 @@ async function handleLogin() {
   localStorage.setItem('state', state.textContent)
 }
 
+
 async function signout() {
   const payload = 'perform=logout&mp_idx=0';
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
-  async function signout() {
-    const payload = 'perform=logout&mp_idx=0';
-    const headers = {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
 
-    try {
-      const response = await axios.post('https://10.20.10.1:8843/setuser.cgi', payload, { headers });
-      const contentLength = response.data.length;
+  try {
+    const response = await fetch('https://10.20.10.1:8843/setuser.cgi', {
+      method: 'POST',
+      body: payload,
+      headers: headers,
+      mode: 'no-cors'
+    });
+    const data = await response.text();
+    const contentLength = data.length;
 
-      return contentLength < 200;
-    } catch (error) {
-      console.error("Logout Error:", error);
-      return false;
-    }
+    return contentLength < 200
+  } catch (error) {
+    console.error("Logout Error:", error);
+    return false;
   }
 }
 
@@ -115,4 +105,3 @@ async function handleLogout() {
   }
   localStorage.setItem('state', state.textContent)
 }
-
