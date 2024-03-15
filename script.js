@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const username = document.getElementById('username');
 const password = document.getElementById('password');
 const invisible = document.getElementById('invisible');
@@ -43,18 +45,17 @@ async function authenticate(username, password) {
   };
 
   try {
-    const response = await fetch('https://10.20.10.1:8843/', {
-      method: 'POST',
-      headers: headers,
-      body: payload,
-    });
+    const response = await axios.post('https://10.20.10.1:8843/', payload, { headers });
 
-    console.log(response)
+    console.log("Full Response:", response);
 
-    const data = await response.text();
-    const contentLength = data.length;
-    const isSuccessful = (800 < contentLength && contentLength < 900);
-    return isSuccessful;
+    if (response.status === 200) {
+      const responseData = response.data;
+      console.log("Response Data:", responseData);
+      return true;
+    } else {
+      return false;
+    }
   } catch (error) {
     console.error("Authentication Error:", error);
     return false;
@@ -70,8 +71,13 @@ async function handleLogin() {
     return;
   }
 
-  await authenticate(uname, pwd)
-  state.textContent = 'Logged in successfully!'
+  let result = await authenticate(uname, pwd)
+  if (result) {
+    state.textContent = 'Logged in successfully!'
+  } else {
+    state.textContent = 'Login failed!'
+  }
+
   localStorage.setItem('username', uname)
   localStorage.setItem('password', pwd)
   localStorage.setItem('state', state.textContent)
@@ -82,27 +88,31 @@ async function signout() {
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded'
   };
+  async function signout() {
+    const payload = 'perform=logout&mp_idx=0';
+    const headers = {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    };
 
-  try {
-    const response = await fetch('https://10.20.10.1:8843/setuser.cgi', {
-      method: 'POST',
-      body: payload,
-      headers: headers,
-    });
+    try {
+      const response = await axios.post('https://10.20.10.1:8843/setuser.cgi', payload, { headers });
+      const contentLength = response.data.length;
 
-    const data = await response.text();
-    const contentLength = data.length;
-
-    return contentLength < 200
-  } catch (error) {
-    console.error("Logout Error:", error);
-    return false;
+      return contentLength < 200;
+    } catch (error) {
+      console.error("Logout Error:", error);
+      return false;
+    }
   }
 }
 
 async function handleLogout() {
-  await signout();
-  state.textContent = 'Logged out successfully!'
+  let result = await signout();
+  if (result) {
+    state.textContent = 'Logged out successfully!'
+  } else {
+    state.textContent = 'Logout failed!'
+  }
   localStorage.setItem('state', state.textContent)
 }
 
