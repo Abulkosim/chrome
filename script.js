@@ -38,13 +38,25 @@ async function authenticate(username, password) {
     const response = await fetch('https://10.20.10.1:8843/', {
       method: 'POST',
       headers: headers,
-      body: payload
+      body: payload,
+      credentials: 'include'
     });
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return true;
+
+    return await new Promise((resolve, reject) => {
+      chrome.cookies.getAll({ url: 'https://10.20.10.1:8843' }, (cookies) => {
+        if (cookies.length > 0) {
+          console.log('Cookies found:', cookies);
+          resolve(true);
+        } else {
+          console.error('No cookies found');
+          resolve(false);
+        }
+      });
+    });
   } catch (error) {
     console.error("Authentication Error:", error);
     return false;
@@ -59,7 +71,6 @@ async function handleLogin() {
     state.textContent = 'Please enter your credentials!';
     return;
   }
-
   let result = await authenticate(uname, pwd)
   if (result) {
     state.textContent = 'Logged in successfully!'
