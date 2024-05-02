@@ -38,22 +38,10 @@ async function authenticate(username, password) {
       method: 'POST',
       headers: headers,
       body: payload,
-      credentials: 'include', 
+      credentials: 'include',
       mode: 'no-cors'
     });
-    
-    return await new Promise((resolve, reject) => {
-      chrome.cookies.getAll({ url: 'https://10.20.10.1:8843' }, (cookies) => {
-        console.log(cookies)
-        if (cookies.length > 0) {
-          console.log('Cookies found:', cookies);
-          resolve(true);
-        } else {
-          console.error('No cookies found');
-          resolve(false);
-        }
-      });
-    });
+    return true
   } catch (error) {
     console.error("Authentication Error:", error);
     return false;
@@ -72,8 +60,10 @@ async function handleLogin(event) {
   }
   let result = await authenticate(uname, pwd)
   if (result) {
+    console.log('Logged in successfully!', result)
     state.textContent = 'Logged in successfully!'
   } else {
+    console.log('Login failed!', result)
     state.textContent = 'Login failed!'
   }
 

@@ -1,9 +1,10 @@
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Tahoma', sans-serif;
   width: 320px;
   padding: 12px 14px;
   color: #fff;
   background: #18181b;
+  letter-spacing: 0.8px;
 }
 
 form {
@@ -17,21 +18,20 @@ form {
 h1 {
   text-align: center;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 28px;
   margin: 4px;
-  letter-spacing: 0.5px;
 }
 
 p {
   text-align: center;
   font-size: 14px;
   color: #a1a1aa;
-  margin: 6px 0 12px;
+  margin: 6px 0 18px;
 }
 
 label {
-  font-size: 14px;
+  font-size: 15px;
   display: inline-block;
   margin-bottom: 5px;
   line-height: 20px;
@@ -39,7 +39,7 @@ label {
 }
 
 input {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Tahoma', sans-serif;
   width: 100%;
   margin-bottom: 5px;
   border-radius: 4px;
@@ -53,6 +53,7 @@ input {
   padding: 8px 10px;
   line-height: 18px;
   transition: border 0.5s;
+  letter-spacing: 0.8px;
 }
 
 #password {
@@ -73,7 +74,7 @@ input:focus {
 
 #buttons button {
   height: 38px;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Tahoma', sans-serif;
   border: none;
   border-radius: 4px;
   font-size: 15px;
@@ -85,6 +86,7 @@ input:focus {
   transition: background-color 0.3s;
   color: #e0e0e0;
   margin: 5px 2px;
+  letter-spacing: 0.8px;
 }
 
 form,
@@ -94,7 +96,7 @@ form div input {
 }
 
 .login {
-  background-color: #f09e0b;
+  background-color: #cd8d1a;
 }
 
 .login:focus {
