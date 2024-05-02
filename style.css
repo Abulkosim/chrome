@@ -1,7 +1,7 @@
 body {
   font-family: 'Tahoma', sans-serif;
-  width: 320px;
-  padding: 12px 14px;
+  width: 310px;
+  padding: 12px 10px;
   color: #fff;
   background: #18181b;
   letter-spacing: 0.8px;
@@ -36,6 +36,8 @@ label {
   margin-bottom: 5px;
   line-height: 20px;
   font-weight: 500;
+  user-select: none; 
+  margin-left: 2px;
 }
 
 input {
@@ -66,7 +68,7 @@ input:focus {
 
 #buttons {
   display: flex;
-  gap: 10px;
+  gap: 5px;
   align-items: center;
   justify-content: center;
   width: 100%;
@@ -87,6 +89,7 @@ input:focus {
   color: #e0e0e0;
   margin: 5px 2px;
   letter-spacing: 0.8px;
+  user-select: none;
 }
 
 form,
