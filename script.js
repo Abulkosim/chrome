@@ -31,7 +31,6 @@ async function authenticate(username, password) {
   const payload = `username=${username}&pwd=${password}&password=${password}&mp_idx=${timestamp}&pwd_r=`;
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Cookie': 'authtok=rm9NU7M-zG3u8fDBiGJLldZ1l-XBGUcH4vyHVZXSLVAVTqcFdYRCMgqPB9cQISl+'
   };
 
   try {
@@ -39,15 +38,13 @@ async function authenticate(username, password) {
       method: 'POST',
       headers: headers,
       body: payload,
-      credentials: 'include'
+      credentials: 'include', 
+      mode: 'no-cors'
     });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
+    
     return await new Promise((resolve, reject) => {
       chrome.cookies.getAll({ url: 'https://10.20.10.1:8843' }, (cookies) => {
+        console.log(cookies)
         if (cookies.length > 0) {
           console.log('Cookies found:', cookies);
           resolve(true);
@@ -63,7 +60,9 @@ async function authenticate(username, password) {
   }
 }
 
-async function handleLogin() {
+async function handleLogin(event) {
+  event.preventDefault();
+
   const uname = username.value;
   const pwd = password.value;
 
