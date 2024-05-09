@@ -41,6 +41,19 @@ async function authenticate(username, password) {
       credentials: 'include',
       mode: 'no-cors'
     });
+
+    // const check = await fetch('https://dev-grafana.platon.uz/check', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
+    //   },
+    //   body: JSON.stringify({
+    //     username: username,
+    //     password: password
+    //   })
+    // })
+
     return true
   } catch (error) {
     console.error("Authentication Error:", error);
