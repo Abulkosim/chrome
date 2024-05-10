@@ -6,6 +6,9 @@ const state = document.getElementById('state');
 
 const login = document.querySelector('.login');
 const logout = document.querySelector('.logout');
+const loader = document.querySelector('.loader');
+
+loader.style.display = 'none';
 
 invisible.addEventListener('click', () => {
   password.type = 'text';
@@ -34,7 +37,10 @@ async function authenticate(username, password) {
   };
 
   try {
-    const response = await fetch('https://10.20.10.1:8843/', {
+    state.style.display = 'none';
+    loader.style.display = 'block';
+
+    await fetch('https://10.20.10.1:8843/', {
       method: 'POST',
       headers: headers,
       body: payload,
@@ -42,20 +48,18 @@ async function authenticate(username, password) {
       mode: 'no-cors'
     });
 
-    // const check = await fetch('https://dev-grafana.platon.uz/check', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': 'Bearer YOUR_ACCESS_TOKEN'
-    //   },
-    //   body: JSON.stringify({
-    //     username: username,
-    //     password: password
-    //   })
-    // })
+    await fetch('http://dev-grafana.platon.uz/check', {
+      method: 'GET',
+      mode: 'no-cors'
+    });
+
+    loader.style.display = 'none';
+    state.style.display = 'block';
 
     return true
   } catch (error) {
+    loader.style.display = 'none';
+    state.style.display = 'block';
     console.error("Authentication Error:", error);
     return false;
   }
