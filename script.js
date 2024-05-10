@@ -3,12 +3,17 @@ const password = document.getElementById('password');
 const invisible = document.getElementById('invisible');
 const visible = document.getElementById('visible');
 const state = document.getElementById('state');
+const info = document.getElementById('info');
 
 const login = document.querySelector('.login');
 const logout = document.querySelector('.logout');
 const loader = document.querySelector('.loader');
 
 loader.style.display = 'none';
+
+if (state.textContent.length == 0) {
+  info.style.display = 'none';
+}
 
 invisible.addEventListener('click', () => {
   password.type = 'text';
@@ -38,6 +43,7 @@ async function authenticate(username, password) {
 
   try {
     state.style.display = 'none';
+    info.style.display = 'block';
     loader.style.display = 'block';
 
     await fetch('https://10.20.10.1:8843/', {
