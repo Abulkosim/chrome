@@ -121,6 +121,7 @@ async function signout() {
 
 async function handleLogout() {
   let result = await signout();
+    info.style.display = 'block';
   if (result) {
     state.textContent = 'Logged out successfully!'
   } else {
