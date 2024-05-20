@@ -163,15 +163,18 @@ svg:hover {
 #info {
   margin-top: 4px;
   color: #a1a1aa;
-  max-height: 24px;
-  min-height: 24px;
 }
 
 #state {
   text-align: center;
   font-size: 14px;
   margin: 0px;
-  min-height: 14px;
+  min-height: 20px;
+}
+
+#state a {
+  color: #f59e0b;
+  text-decoration: none;
 }
 
 #timer {

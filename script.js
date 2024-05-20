@@ -29,7 +29,7 @@ visible.addEventListener('click', () => {
 
 username.value = localStorage.getItem('username')
 password.value = localStorage.getItem('password')
-state.textContent = localStorage.getItem('state')
+state.innerHTML = localStorage.getItem('state')
 
 login.addEventListener('click', handleLogin);
 logout.addEventListener('click', handleLogout);
@@ -46,7 +46,7 @@ async function authenticate(username, password) {
     info.style.display = 'block';
     loader.style.display = 'block';
 
-    await fetch('https://10.20.10.1:8843/', {
+    const response = await fetch('https://10.20.10.1:8843/', {
       method: 'POST',
       headers: headers,
       body: payload,
@@ -78,23 +78,21 @@ async function handleLogin(event) {
   const pwd = password.value;
 
   if (!username.value || !password.value) {
-    state.textContent = 'Please enter your credentials!';
+    state.innerHTML = 'Please enter your credentials!';
     return;
   }
+
   let result = await authenticate(uname, pwd)
   if (result) {
-    console.log('Logged in successfully!', result)
-    state.textContent = 'Logged in successfully!'
+    state.innerHTML = 'Logged in successfully!'
   } else {
-    console.log('Login failed!', result)
-    state.textContent = 'Login failed!'
+    state.innerHTML = "Login failed! Ensure you're connected to WiFi with the correct credentials. If issues persist, visit <a href='https://10.20.10.1:8843/' target='_blank'>10.20.10.1:8843</a>"
   }
 
   localStorage.setItem('username', uname)
   localStorage.setItem('password', pwd)
-  localStorage.setItem('state', state.textContent)
+  localStorage.setItem('state', state.innerHTML)
 }
-
 
 async function signout() {
   const payload = 'perform=logout&mp_idx=0';
@@ -121,11 +119,11 @@ async function signout() {
 
 async function handleLogout() {
   let result = await signout();
-    info.style.display = 'block';
+  info.style.display = 'block';
   if (result) {
-    state.textContent = 'Logged out successfully!'
+    state.innerHTML = 'Logged out successfully!'
   } else {
-    state.textContent = 'Logout failed!'
+    state.innerHTML = 'Logout failed!'
   }
-  localStorage.setItem('state', state.textContent)
+  localStorage.setItem('state', state.innerHTML)
 }
